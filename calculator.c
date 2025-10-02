@@ -25,13 +25,13 @@ int calculation(int num1, int num2, char operator){
         return num1 * num2;
         case '/':
         if(num2 == 0){
-            printf("Cannot be divided by 0\n");
+            printf("Error: Division by zero.\n");
             valid = 0;
             exit(1);
         }
         return num1/num2;
         default:
-        printf("Invalid operator or character\n");
+        printf("Error: Invalid expression;\n");
         valid = 0;
         exit(1);
     }
@@ -71,7 +71,7 @@ int evaluate_expression(char *expression){
             i++;
             continue;
         }
-        printf("Invalid character or operator: %c\n", expression[i]);
+        printf("Error: Invalid expression.\n");
         valid = 0;
         break;
     }
