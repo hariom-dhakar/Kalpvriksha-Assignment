@@ -4,6 +4,7 @@
 
 #define FILENAME "users_data.txt"
 
+// User structure
 typedef struct
 {
      int id;
