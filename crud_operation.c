@@ -12,6 +12,7 @@ typedef struct
      int experience;
 } user;
 
+// Add user Operation
 void add_user(){
      FILE *fp = fopen(FILENAME, "a");
      if (fp == NULL)
@@ -33,6 +34,7 @@ void add_user(){
      printf("New User added successfully\n");
 }
 
+// Show user operation
 void display_users(){
      FILE *fp = fopen(FILENAME, "r");
      if (fp == NULL)
@@ -48,6 +50,7 @@ void display_users(){
      fclose(fp);
 }
 
+// Update user operation
 void update_user(){
      FILE *fp = fopen(FILENAME, "r");
      FILE *temp = fopen("temp.txt", "w");
@@ -86,6 +89,7 @@ void update_user(){
      }
 }
 
+// Delete user operation
 void delete_user(){
      FILE *fp = fopen(FILENAME, "r");
      FILE *temp = fopen("temp.txt", "w");
