@@ -35,17 +35,36 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        printf("Enter Roll Number, Name, and Marks in 3 subjects for student %d:\n", i + 1);
-        scanf("%d %s %d %d %d", &students[i].roll, students[i].name,
-              &students[i].marks[0], &students[i].marks[1], &students[i].marks[2]);
+        printf("Enter details for student %d:\n", i + 1);
+        printf("Enter Roll Number: ");
+        scanf("%d", &students[i].roll);
+        if (students[i].roll < 1)
+        {
+            printf("Please enter a valid roll number.\n\n");
+            i--;
+            continue;
+        }
+        printf("Enter Name: ");
+        scanf("%s", students[i].name);
+        printf("Enter Marks in 3 subjects (out of 100): ");
+        for (int j = 0; j < 3; j++)
+        {
+            printf("Subject %d: ", j + 1);
+            scanf("%d", &students[i].marks[j]);
+            if (students[i].marks[j] < 0 || students[i].marks[j] > 100)
+            {
+                printf("Please enter valid marks between 0 and 100.\n\n");
+                j--;
+                continue;
+            }
+        }
 
-        students[i].total = calculateTotal(students[i].marks, 3);     // Calculate total marks
-        students[i].average = calculateAverage(students[i].total); // Calculate average marks
-        students[i].grade = assignGrade(students[i].average);         // Assign grade based on average
+        students[i].total = calculateTotal(students[i].marks, 3);
+        students[i].average = calculateAverage(students[i].total);
+        students[i].grade = assignGrade(students[i].average);
     }
     printf("\n\n");
-    sortByRollNumber(students, n); // Sort students by roll number
-    // Display student details
+    sortByRollNumber(students, n);
     for (int i = 0; i < n; i++)
     {
         printf("Roll Number: %d\n", students[i].roll);
@@ -53,7 +72,7 @@ int main()
         printf("Total: %d\n", students[i].total);
         printf("Average: %.2f\n", students[i].average);
         printf("Grade: %c \n", students[i].grade);
-        if (students[i].average < 35) // if average is less than 35 then no stars
+        if (students[i].average < 35)
         {
             printf("\n\n");
             continue;
@@ -64,14 +83,18 @@ int main()
     }
 
     printf("List of Roll Numbers:\n");
-    printRollNumbers(students, 0, n); // Printing roll numbers using recursion
+    printRollNumbers(students, 0, n);
     return 0;
 }
 
-void sortByRollNumber(struct Student students[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (students[i].roll > students[j].roll) {
+void sortByRollNumber(struct Student students[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (students[i].roll > students[j].roll)
+            {
                 struct Student temp = students[i];
                 students[i] = students[j];
                 students[j] = temp;
@@ -153,6 +176,5 @@ void printRollNumbers(Student students[], int i, int n)
         return;
     }
     printf("%d ", students[i].roll);
-    printRollNumbers(students, i + 1, n); // Recursive call
+    printRollNumbers(students, i + 1, n);
 }
-
