@@ -7,11 +7,11 @@
 #define MAX_SIZE 10
 #define MIN_SIZE 2
 
-void generateImage(int **, int);
-void printImage(int **, int);
-void rotateImage(int **, int);
-void invertRotatedImage(int **, int);
-void smoothingFilter(int **, int);
+void generateImage(int**, int);
+void printImage(int**, int);
+void rotateImage(int**, int);
+void invertRotatedImage(int**, int);
+void smoothingFilter(int**, int);
 
 int main()
 {
@@ -42,7 +42,8 @@ int main()
     printf("Matrix after 90 Degrees Clockwise Rotation:\n");
     printImage(image, n);
     printf("\n");
-    invertRotatedImage(image, n);
+    invertRotatedImage(image, n); // Inverting the rotation,
+                                 // because we have to apply smoothing on the original image
 
     smoothingFilter(image, n);
     printf("Matrix after Applying 3x3 Smoothing Filter:\n");
@@ -57,7 +58,7 @@ int main()
     return 0;
 }
 
-void generateImage(int **image, int n)
+void generateImage(int** image, int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -69,7 +70,7 @@ void generateImage(int **image, int n)
     }
 }
 
-void printImage(int **image, int n)
+void printImage(int** image, int n)
 {
     for (int i = 0; i < n; i++)
     {
@@ -81,15 +82,15 @@ void printImage(int **image, int n)
     }
 }
 
-void rotateImage(int **image, int n)
+void rotateImage(int** image, int n)
 {
     int temp;
-    for (int layer = 0; layer < n / 2; layer++)
+    for (int layer = 0; layer < n / 2; layer++) // layer by layer
     {
-        int first = layer, last = n - 1 - layer;
+        int first = layer, last = n - 1 - layer; 
         for (int i = 0; i < last - first; i++)
         {
-            int *top_ptr = *(image + first) + (first + i);
+            int *top_ptr = *(image + first) + (first + i); 
             int *right_ptr = *(image + first + i) + last;
             int *bottom_ptr = *(image + last) + (last - i);
             int *left_ptr = *(image + last - i) + first;
@@ -103,7 +104,7 @@ void rotateImage(int **image, int n)
     }
 }
 
-void invertRotatedImage(int **image, int n)
+void invertRotatedImage(int** image, int n)
 {
     int temp;
     for (int layer = 0; layer < n / 2; layer++)
@@ -127,10 +128,10 @@ void invertRotatedImage(int **image, int n)
     }
 }
 
-void smoothingFilter(int **image, int n)
+void smoothingFilter(int** image, int n)
 {
-    int *temp_prev = (int *)malloc(n * sizeof(int));
-    int *temp_next = (int *)malloc(n * sizeof(int));
+    int *temp_prev = (int *)malloc(n * sizeof(int)); 
+    int *temp_next = (int *)malloc(n * sizeof(int)); 
 
     for (int i = 0; i < n; i++)
     {
@@ -144,18 +145,17 @@ void smoothingFilter(int **image, int n)
         {
             int sum = 0;
             int count = 0;
-            for (int row_i = -1; row_i <= 1; row_i++)
+            for (int row_i = -1; row_i <= 1; row_i++) // row_i = neighboring rows
             {
-                for (int col_j = -1; col_j <= 1; col_j++)
+                for (int col_j = -1; col_j <= 1; col_j++) // col_j = neighboring columns
                 {
-                    int row_e = i + row_i;
-                    int col_e = j + col_j;
+                    int row_e = i + row_i; // effective row
+                    int col_e = j + col_j; // effective column
                     if (row_e >= 0 && row_e < n && col_e >= 0 && col_e < n)
                     {
                         int neighbor_val;
                         if (row_e < i)
                         {
-
                             neighbor_val = *(temp_prev + col_e);
                         }
                         else if (row_e == i)
@@ -174,11 +174,11 @@ void smoothingFilter(int **image, int n)
             }
             *(temp_next + j) = sum / count;
         }
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < n; j++) // Copy current row to temp_prev
         {
             *(temp_prev + j) = *(*(image + i) + j);
         }
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < n; j++) // Update image row with smoothed values
         {
             *(*(image + i) + j) = *(temp_next + j);
         }
