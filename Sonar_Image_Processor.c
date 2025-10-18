@@ -63,7 +63,7 @@ void generateImage(int** image, int n)
         *(image + i) = (int *)malloc(n * sizeof(int));
         for (int j = 0; j < n; j++)
         {
-            *(*(image + i) + j) = (rand() % MAX_RANGE);
+            *(*(image + i) + j) = (rand() % (MAX_RANGE+1));
         }
     }
 }
