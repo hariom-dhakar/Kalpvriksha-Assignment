@@ -18,17 +18,17 @@ int main()
     srand(time(NULL));
     int n;
     printf("Enter the size of the image (2-10): ");
-    if(scanf("%d", &n)!=1){
-        printf("Invalid input please enter an integer only.\n");
-        return 1;
-    }
-    while (n < MIN_SIZE || n > MAX_SIZE)
+     while (1)
     {
-        printf("Please enter a valid size between %d and %d.\n", MIN_SIZE, MAX_SIZE);
-        if(scanf("%d", &n)!=1){
-            printf("Invalid input please enter an integer only.\n");
-            return 1;
+        if (scanf("%d", &n) == 1 && n >= MIN_SIZE && n <= MAX_SIZE)
+        {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF){}
+            break;
         }
+        printf("Invalid input please enter a number between %d and %d: ", MIN_SIZE, MAX_SIZE);
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF){}
     }
     
     int **image = (int **)malloc(n * sizeof(int *));
@@ -42,8 +42,6 @@ int main()
     printf("Matrix after 90 Degrees Clockwise Rotation:\n");
     printImage(image, n);
     printf("\n");
-    invertRotatedImage(image, n); // Inverting the rotation,
-                                 // because we have to apply smoothing on the original image
 
     smoothingFilter(image, n);
     printf("Matrix after Applying 3x3 Smoothing Filter:\n");
@@ -65,7 +63,7 @@ void generateImage(int** image, int n)
         *(image + i) = (int *)malloc(n * sizeof(int));
         for (int j = 0; j < n; j++)
         {
-            *(*(image + i) + j) = (rand() % (MAX_RANGE - MIN_RANGE + 1)) + MIN_RANGE;
+            *(*(image + i) + j) = (rand() % MAX_RANGE);
         }
     }
 }
@@ -104,29 +102,6 @@ void rotateImage(int** image, int n)
     }
 }
 
-void invertRotatedImage(int** image, int n)
-{
-    int temp;
-    for (int layer = 0; layer < n / 2; layer++)
-    {
-        int first = layer;
-        int last = n - 1 - layer;
-
-        for (int i = 0; i < last - first; i++)
-        {
-            int *top_ptr = *(image + first) + (first + i);
-            int *right_ptr = *(image + (first + i)) + last;
-            int *bottom_ptr = *(image + last) + (last - i);
-            int *left_ptr = *(image + (last - i)) + first;
-
-            temp = *top_ptr;
-            *top_ptr = *right_ptr;
-            *right_ptr = *bottom_ptr;
-            *bottom_ptr = *left_ptr;
-            *left_ptr = temp;
-        }
-    }
-}
 
 void smoothingFilter(int** image, int n)
 {
