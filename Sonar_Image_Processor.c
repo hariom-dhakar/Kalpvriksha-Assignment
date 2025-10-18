@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_RANGE 255
-#define MIN_RANGE 0
+#define MAX_RANGE 256
 #define MAX_SIZE 10
 #define MIN_SIZE 2
 
@@ -63,7 +62,7 @@ void generateImage(int** image, int n)
         *(image + i) = (int *)malloc(n * sizeof(int));
         for (int j = 0; j < n; j++)
         {
-            *(*(image + i) + j) = (rand() % (MAX_RANGE+1));
+            *(*(image + i) + j) = (rand() % MAX_RANGE);
         }
     }
 }
