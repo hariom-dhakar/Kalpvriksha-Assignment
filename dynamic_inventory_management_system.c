@@ -36,6 +36,7 @@ void searchProductByName();
 void searchProductByPriceRange();
 void deleteProduct();
 void cleanupMemory();
+int getValidatedProductId(const char *prompt);
 
 Product *gInventory = NULL;
 int gProductCount = 0;
@@ -155,6 +156,30 @@ void clearInputBuffer()
     }
 }
 
+int getValidatedProductId(const char *prompt)
+{
+    int id;
+
+    while (1)
+    {
+        printf("%s", prompt);
+        if (scanf("%d", &id) == 1)
+        {
+            clearInputBuffer();
+            if (id >= MIN_PRODUCT_ID && id <= MAX_PRODUCT_ID)
+            {
+                return id;
+            }
+        }
+        else
+        {
+            clearInputBuffer();
+        }
+        printf(" -> Invalid ID. Please enter a number between %d and %d.\n",
+               MIN_PRODUCT_ID, MAX_PRODUCT_ID);
+    }
+}
+
 bool readString(char *buffer, int size)
 {
     if (fgets(buffer, size, stdin) == NULL)
@@ -226,30 +251,11 @@ bool addProduct()
     }
 
     Product p;
-    int id;
     char nameBuf[MAX_NAME_LENGTH];
     float price;
     int qty;
 
-    while (1)
-    {
-        printf("Product ID (%d-%d): ", MIN_PRODUCT_ID, MAX_PRODUCT_ID);
-        if (scanf("%d", &id) == 1)
-        {
-            clearInputBuffer();
-            if (id >= MIN_PRODUCT_ID && id <= MAX_PRODUCT_ID && isIdUnique(id))
-            {
-                p.productId = id;
-                break;
-            }
-        }
-        else
-        {
-            clearInputBuffer();
-        }
-        printf(" -> Invalid or duplicate ID, please enter a unique number between %d and %d\n",
-               MIN_PRODUCT_ID, MAX_PRODUCT_ID);
-    }
+    p.productId = getValidatedProductId("Enter Product ID (1-10000): ");
 
     printf("Product Name (max 50 chars): ");
     if (!readString(nameBuf, MAX_NAME_LENGTH) || strlen(nameBuf) == 0)
@@ -326,15 +332,7 @@ void updateQuantity()
         printf("Inventory is empty, cannot update quantity\n");
         return;
     }
-    int id;
-    printf("Enter Product ID to update quantity: ");
-    if (scanf("%d", &id) != 1)
-    {
-        clearInputBuffer();
-        printf("Invalid ID format entered\n");
-        return;
-    }
-    clearInputBuffer();
+    int id = getValidatedProductId("Enter Product ID to update quantity: ");
 
     int idx = -1;
     for (int i = 0; i < gProductCount; ++i)
@@ -380,15 +378,7 @@ void searchProductById()
         printf("Inventory is empty, cannot search\n");
         return;
     }
-    int id;
-    printf("Enter Product ID to search: ");
-    if (scanf("%d", &id) != 1)
-    {
-        clearInputBuffer();
-        printf("Invalid ID format entered\n");
-        return;
-    }
-    clearInputBuffer();
+    int id = getValidatedProductId("Enter Product ID to search: ");
 
     for (int i = 0; i < gProductCount; ++i)
     {
@@ -487,15 +477,7 @@ void deleteProduct()
         printf("Inventory is empty cannot delete\n");
         return;
     }
-    int id;
-    printf("Enter Product ID to delete: ");
-    if (scanf("%d", &id) != 1)
-    {
-        clearInputBuffer();
-        printf("Invalid ID format entered\n");
-        return;
-    }
-    clearInputBuffer();
+    int id = getValidatedProductId("Enter Product ID to delete: ");
 
     int idx = -1;
     for (int i = 0; i < gProductCount; ++i)
