@@ -133,8 +133,9 @@ int main()
 void initDisk()
 {
     virtualDisk = malloc(NUM_BLOCKS * sizeof(char *));
-    for (int i = 0; i < NUM_BLOCKS; i++)
+    for (int i = 0; i < NUM_BLOCKS; i++){
         virtualDisk[i] = calloc(BLOCK_SIZE, sizeof(char));
+    }
 }
 
 void initFreeBlocks()
@@ -222,8 +223,9 @@ void printPath(File *dir)
     if (dir->parent)
     {
         printPath(dir->parent);
-        if (strcmp(dir->name, "/") != 0)
+        if (strcmp(dir->name, "/") != 0){
             printf("%s/", dir->name);
+        }
     }
     else
     {
@@ -313,8 +315,9 @@ void rmdirCmd(char *name)
             }
             else
             {
-                if (temp == cwd->children)
+                if (temp == cwd->children){
                     cwd->children = temp->next;
+                }
 
                 temp->prev->next = temp->next;
                 temp->next->prev = temp->prev;
@@ -518,8 +521,9 @@ void writeCmd(char *name, char *data)
                 FreeBlock *tempBlock = freeBlockHead;
                 freeBlockHead = tempBlock->next;
 
-                if (freeBlockHead)
+                if (freeBlockHead){
                     freeBlockHead->prev = NULL;
+                }
 
                 temp->blocks[temp->blockCount++] = tempBlock->index;
 
@@ -596,8 +600,9 @@ void deleteCmd(char *name)
                 node->index = temp->blocks[i];
                 node->next = freeBlockHead;
                 node->prev = NULL;
-                if (freeBlockHead)
+                if (freeBlockHead){
                     freeBlockHead->prev = node;
+                }
                 freeBlockHead = node;
                 usedBlocks--;
             }
