@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define BLOCK_SIZE 512
-#define NUM_BLOCKS 1024
+#define NUM_BLOCKS 32
 #define MAX_FILENAME_LEN 50
 #define MAX_BLOCK_PER_FILE 100
 
@@ -64,11 +64,10 @@ int main()
 
     while (1)
     {
-        printPath(cwd);
-        printf("> ");
-
-        if (scanf("%s", cmd) != 1)
+        printf("%s > ",cwd->name);
+        if (scanf("%s", cmd) != 1){
             continue;
+        }
 
         if (strcmp(cmd, "exit") == 0)
         {
@@ -85,6 +84,11 @@ int main()
         {
             scanf("%s", fileNameInput);
             rmdirCmd(fileNameInput);
+        }
+        else if (strcmp(cmd, "pwd") == 0)
+        {
+            printPath(cwd);
+            printf("\n");
         }
 
         else if (strcmp(cmd, "ls") == 0)
@@ -133,7 +137,8 @@ int main()
 void initDisk()
 {
     virtualDisk = malloc(NUM_BLOCKS * sizeof(char *));
-    for (int i = 0; i < NUM_BLOCKS; i++){
+    for (int i = 0; i < NUM_BLOCKS; i++)
+    {
         virtualDisk[i] = calloc(BLOCK_SIZE, sizeof(char));
     }
 }
@@ -223,7 +228,8 @@ void printPath(File *dir)
     if (dir->parent)
     {
         printPath(dir->parent);
-        if (strcmp(dir->name, "/") != 0){
+        if (strcmp(dir->name, "/") != 0)
+        {
             printf("%s/", dir->name);
         }
     }
@@ -311,11 +317,12 @@ void rmdirCmd(char *name)
 
             if (temp == cwd->children && temp->next == temp)
             {
-                cwd->children = NULL; 
+                cwd->children = NULL;
             }
             else
             {
-                if (temp == cwd->children){
+                if (temp == cwd->children)
+                {
                     cwd->children = temp->next;
                 }
 
@@ -333,7 +340,6 @@ void rmdirCmd(char *name)
 
     printf("Err: Directory '%s' not found.\n", name);
 }
-
 
 void lsCmd()
 {
@@ -521,7 +527,8 @@ void writeCmd(char *name, char *data)
                 FreeBlock *tempBlock = freeBlockHead;
                 freeBlockHead = tempBlock->next;
 
-                if (freeBlockHead){
+                if (freeBlockHead)
+                {
                     freeBlockHead->prev = NULL;
                 }
 
@@ -600,7 +607,8 @@ void deleteCmd(char *name)
                 node->index = temp->blocks[i];
                 node->next = freeBlockHead;
                 node->prev = NULL;
-                if (freeBlockHead){
+                if (freeBlockHead)
+                {
                     freeBlockHead->prev = node;
                 }
                 freeBlockHead = node;
